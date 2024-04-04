@@ -19,6 +19,15 @@ example {a b : ℚ} (h1 : a - b = 4) (h2 : a * b = 1) : (a + b) ^ 2 = 20 :=
     _ = 4 ^ 2 + 4 * 1 := by rw [h1, h2]
     _ = 20 := by ring
 
+-- Example 1.2.1 with verbose steps
+example {a b : ℚ} (h1 : a - b = 4) (h2 : a * b = 1) : (a + b) ^ 2 = 20 :=
+  calc
+    (a + b)^2 = a^2 + 2*a*b + b^2 := by ring
+    _ = a^2 - 2*a*b + b^2 + 4*a*b := by ring
+    _ = (a - b)^2 + 4*(a*b) := by ring
+    _ = (4)^2 + 4*(1) := by rw [h1, h2]
+    _ = 20 := by ring
+
 -- Example 1.2.2.
 -- Exercise: replace the words "sorry" with the correct Lean justification.
 example {r s : ℝ} (h1 : s = 3) (h2 : r + 2 * s = -1) : r = -7 :=
