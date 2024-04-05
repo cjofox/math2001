@@ -19,13 +19,23 @@ example {a b : ℚ} (h1 : a - b = 4) (h2 : a * b = 1) : (a + b) ^ 2 = 20 :=
     _ = 4 ^ 2 + 4 * 1 := by rw [h1, h2]
     _ = 20 := by ring
 
--- Example 1.2.1 with verbose steps
+-- Example 1.2.1.a: Demonstrating algebraic manipulation in Lean with verbose steps
+-- Problem Statement:
+-- Let a and b be rational numbers,
+-- suppose that a - b = 4 and ab = 1,
+-- show that (a + b)^2 = 20.
 example {a b : ℚ} (h1 : a - b = 4) (h2 : a * b = 1) : (a + b) ^ 2 = 20 :=
+-- Solution
   calc
+    -- Step 1: Expand (a + b)^2 using the binomial theorem.
     (a + b)^2 = a^2 + 2*a*b + b^2 := by ring
+    -- Step 2: Introduce 4ab by adding and subtracting 2ab.
     _ = a^2 - 2*a*b + b^2 + 4*a*b := by ring
+    -- Step 3: Recognize (a - b)^2 and factor it out.
     _ = (a - b)^2 + 4*(a*b) := by ring
+    -- Step 4: Substitute given values from hypotheses h1 (a - b = 4) and h2 (ab = 1).
     _ = (4)^2 + 4*(1) := by rw [h1, h2]
+    -- Conclusion: Simplify to show (a + b)^2 equals 20.
     _ = 20 := by ring
 
 -- Example 1.2.2.
