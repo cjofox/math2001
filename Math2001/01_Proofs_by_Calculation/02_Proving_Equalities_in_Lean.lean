@@ -57,6 +57,27 @@ example {a b m n : ℤ} (h1 : a * m + b * n = 1) (h2 : b ^ 2 = 2 * a ^ 2) :
     _ = 2 * 1 ^ 2 + (m ^ 2 - 2 * n ^ 2) * (2 * a ^ 2 - 2 * a ^ 2) := by rw [h1, h2]
     _ = 2 := by ring
 
+-- Example 1.2.3.a: Alternative solution with more verbose intermediate steps.
+example {a b n m : ℤ} (h1 : a*m + b*n = 1) (h2 : b^2 = 2*a^2) : (2*a*n + b*m)^2 = 2 :=
+  calc
+    -- Expand the square of the sum
+    (2*a*n + b*m)^2 = 4*a^2*n^2 + 4*a*b*m*n + (b^2)*m^2 := by ring
+    -- Apply the second hypothesis to replace b^2 with 2*a^2
+    _               = 4*a^2*n^2 + 4*a*b*m*n + (2*a^2)*m^2 := by rw [h2]
+    -- Factor out the common term 2*a^2 from the first and last terms
+    _               = 2*(2*a^2)*n^2 + 4*a*b*m*n + 2*a^2*m^2 := by ring
+    -- Use the reverse of the second hypothesis to replace 2*a^2 with b^2 in the first term
+    _               = 2*(b^2)*n^2 + 4*a*b*m*n + 2*a^2*m^2 := by rw [←h2]
+    -- Recognize and rewrite the entire expression as twice the square of (b*n + a*m)
+    _               = 2*(b*n + a*m)^2 := by ring
+    -- Commutativity of addition in the square term
+    _               = 2*(a*m + b*n)^2 := by ring
+    -- Apply the first hypothesis where a*m + b*n equals 1
+    _               = 2*(1)^2 := by rw [h1]
+    -- Simplify to complete the proof
+    _               = 2 := by ring
+
+
 -- Example 1.2.4.
 -- Exercise: type out the whole proof printed in the text as a Lean proof.
 example {a b c d e f : ℤ} (h1 : a * d = b * c) (h2 : c * f = d * e) :
