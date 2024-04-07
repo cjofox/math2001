@@ -93,80 +93,93 @@ example {z : ℝ} (h1 : z ^ 2 - 2 = 0) : z ^ 4 - z ^ 3 - z ^ 2 + 2 * z + 1 = 3 :
 Solve these problems yourself.  You may find it helpful to solve them on paper before typing them
 up in Lean. -/
 
+-- Derive y = 9 using given x = 3 and y as a function of x.
 example {x y : ℝ} (h1 : x = 3) (h2 : y = 4 * x - 3) : y = 9 :=
   calc
     y = 4*(x) - 3 := by rw [h2]
     _ = 4*(3) - 3 := by rw [h1]
     _ = 9 := by ring
 
+-- Prove a = b given a - b = 0
 example {a b : ℤ} (h : a - b = 0) : a = b :=
   calc
     a = (a - b) + b := by ring
     _ = (0) + b := by rw [h]
     _ = b := by ring
 
+-- Prove x = 14 given x - 3y = 5 and y = 3
 example {x y : ℤ} (h1 : x - 3 * y = 5) (h2 : y = 3) : x = 14 :=
   calc
     x = (x - 3*y) + 3*(y) := by ring
     _ = (5) + 3*(3) := by rw [h1, h2]
     _ = 14 := by ring
 
+-- Prove p = -1 given p - 2q = 1 and q = -1
 example {p q : ℚ} (h1 : p - 2 * q = 1) (h2 : q = -1) : p = -1 :=
   calc
     p = (p - 2*q) + 2*(q) := by ring
     _ = (1) + 2*(-1) := by rw [h1, h2]
     _ = -1 := by ring
 
+-- Prove x = -1 given y + 1 = 3 and x + 2y = 3
 example {x y : ℚ} (h1 : y + 1 = 3) (h2 : x + 2 * y = 3) : x = -1 :=
   calc
     x = (x + 2*y) - 2*((y + 1) - 1) := by ring
     _ = (3) - 2*((3) - 1) := by rw [h2, h1]
     _ = -1 := by ring
 
+-- Prove p = -11 given p + 4q = 1 and q - 1 = 2
 example {p q : ℤ} (h1 : p + 4 * q = 1) (h2 : q - 1 = 2) : p = -11 :=
   calc
     p = (p + 4*q) - 4*((q - 1) + 1) := by ring
     _ = (1) - 4*((2) + 1) := by rw [h1, h2]
     _ = -11 := by ring
 
+-- Prove a = 2 given a + 2b + 3c = 7, b + 2c = 3, and c = 1
 example {a b c : ℝ} (h1 : a + 2 * b + 3 * c = 7) (h2 : b + 2 * c = 3)
     (h3 : c = 1) : a = 2 :=
   calc
-    a = (a + 2*b + 3*c) -(2*(b + 2*c) - (c)) := by ring
-    _ = (7) -(2*(3) - (1)) := by rw [h1, h2, h3]
+    a = (a + 2*b + 3*c) - (2*(b + 2*c) - (c)) := by ring
+    _ = (7) - (2*(3) - (1)) := by rw [h1, h2, h3]
     _ = 2 := by ring
 
+-- Prove u = 1/4 given 4u + v = 3 and v = 2
 example {u v : ℚ} (h1 : 4 * u + v = 3) (h2 : v = 2) : u = 1 / 4 :=
   calc
     u = ((4*u + v) - (v))/4 := by ring
     _ = ((3) - (2))/4 := by rw [h1, h2]
     _ = 1/4 := by ring
 
+-- Prove c = -3 given 4c + 1 = 3c - 2
 example {c : ℚ} (h1 : 4 * c + 1 = 3 * c - 2) : c = -3 :=
   calc
     c = (4*c + 1) - 3*c - 1 := by ring
     _ = (3*c - 2) - 3*c - 1 := by rw [h1]
     _ = -3 := by ring
 
-example {p : ℝ} (h1 : 5*p - 3 = 3*p + 1) : p = 2 :=
+-- Prove p = 2 given 5p - 3 = 3p + 1
+example {p : ℝ} (h1 : 5 * p - 3 = 3 * p + 1) : p = 2 :=
   calc
     p = (2*p + (5*p - 3) - 5*p + 3)/2 := by ring
     _ = (2*p + (3*p + 1) - 5*p + 3)/2 := by rw [h1]
     _ = (2*p - 2*p + 4)/2 := by ring
     _ = 2 := by ring
 
+-- Prove x = 3 given 2x + y = 4 and x + y = 1
 example {x y : ℤ} (h1 : 2 * x + y = 4) (h2 : x + y = 1) : x = 3 :=
   calc
     x = (2*x + y) - (x + y) := by ring
     _ = (4) - (1) := by rw [h1, h2]
     _ = 3 := by ring
 
+-- Prove a = 2 given a + 2b = 4 and a - b = 1
 example {a b : ℝ} (h1 : a + 2 * b = 4) (h2 : a - b = 1) : a = 2 :=
   calc
-    a = ((a + 2*b) + 2*(a - b))/3  := by ring
+    a = ((a + 2*b) + 2*(a - b))/3 := by ring
     _ = ((4) + 2*(1))/3 := by rw [h1, h2]
     _ = 2 := by ring
 
+-- Prove u^2 + 3u + 1 = v^2 + v - 1 given u + 1 = v
 example {u v : ℝ} (h1 : u + 1 = v) : u ^ 2 + 3 * u + 1 = v ^ 2 + v - 1 :=
   calc
     u^2 + 3*u + 1 = ((u + 1) - 1)^2 + 3*((u + 1) - 1) + 1 := by ring
@@ -174,6 +187,7 @@ example {u v : ℝ} (h1 : u + 1 = v) : u ^ 2 + 3 * u + 1 = v ^ 2 + v - 1 :=
     _ = v^2 - 2*v + 1 + 3*v - 2 := by ring
     _ = v^2 + v - 1 := by ring
 
+-- Prove t^4 + 3t^3 - 3t^2 - 2t - 2 = 10t + 2 given t^2 - 4 = 0
 example {t : ℚ} (ht : t ^ 2 - 4 = 0) :
     t ^ 4 + 3 * t ^ 3 - 3 * t ^ 2 - 2 * t - 2 = 10 * t + 2 :=
   calc
@@ -186,9 +200,10 @@ example {t : ℚ} (ht : t ^ 2 - 4 = 0) :
 example {x y : ℝ} (h1 : x + 3 = 5) (h2 : 2 * x - y * x = 0) : y = 2 :=
   sorry
 
+-- Derive the sum of squares p^2 + q^2 + r^2 = -4 from the system of equations p + q + r = 0 and pq + pr + qr = 2
 example {p q r : ℚ} (h1 : p + q + r = 0) (h2 : p * q + p * r + q * r = 2) :
     p ^ 2 + q ^ 2 + r ^ 2 = -4 :=
   calc
-    p^2 + q^2 + r^2 = (p + q + r)^2 -2*(p*q + p*r + q*r) := by ring
+    p^2 + q^2 + r^2 = (p + q + r)^2 - 2*(p*q + p*r + q*r) := by ring
     _ = (0)^2 -2*(2) := by rw [h1, h2]
     _ = -4 := by ring
