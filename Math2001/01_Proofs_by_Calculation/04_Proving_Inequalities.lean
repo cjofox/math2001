@@ -132,6 +132,30 @@ example {a b c : ℝ} :
           + a ^ 2 * (a ^ 6 + 8 * b ^ 3 * c ^ 3) := by extra
     _ = (a ^ 4 + b ^ 4 + c ^ 4) ^ 2 := by ring
 
+-- Example 1.4.10.a: Alternative solution.
+-- Show a^2(a^6 + 8b^3c^3) ≤ (a^4 + b^4 + c^4)^2 for real numbers a, b, and c.
+-- Use the non-negative squares: (a^2*(b^2-c^2))^2, (b^4 - c^4)^2 and (a^2*b*c - b^2*c^2)^2.
+example {a b c : ℝ} :
+    a ^ 2 * (a ^ 6 + 8 * b ^ 3 * c ^ 3) ≤ (a ^ 4 + b ^ 4 + c ^ 4) ^ 2 :=
+  calc
+    -- Distributing a^2 across the sum.
+    a^2*(a^6 + 8*b^3*c^3) = a^8 + 8*a^2*b^3*c^3 := by ring
+    -- Adding a non-negative term, 4*(a^2*b*c - b^2*c^2)^2, to the right side maintains the
+    -- inequality.
+    _ ≤ a^8 + 8*a^2*b^3*c^3 + 4*(a^2*b*c - b^2*c^2)^2 := by extra
+    -- Expanding and simplifying the added square term.
+    _ = a^8 + 4*a^4*b^2*c^2 + 4*b^4*c^4 := by ring
+    -- Introducing another non-negative square term, 2*(a^2*(b^2-c^2))^2, to further adjust the
+    -- right side.
+    _ ≤ a^8 + 4*a^4*b^2*c^2 + 4*b^4*c^4 + 2*(a^2*(b^2-c^2))^2 := by extra
+    -- Simplifying the expression by expanding and rearranging terms.
+    _ = a^8 + 4*b^4*c^4 + 2*a^4*b^4 + 2*a^4*c^4 := by ring
+    -- Adding (b^4 - c^4)^2, another non-negative term, to continue the inequality.
+    _ ≤ a^8 + 4*b^4*c^4 + 2*a^4*b^4 + 2*a^4*c^4 + (b^4-c^4)^2 := by extra
+    -- Further expanding and rearranging brings the expression closer to the target form.
+    _ = a^8 + b^8 + c^8 + 2*b^4*c^4 + 2*a^4*b^4 + 2*a^4*c^4 := by ring
+    -- Recognizing the final expression as the square of the sum (a^4 + b^4 + c^4).
+    _ = (a^4 + b^4 + c^4)^2 := by ring
 
 /-! # Exercises
 
