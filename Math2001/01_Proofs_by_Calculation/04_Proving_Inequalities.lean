@@ -99,6 +99,29 @@ example {a b : ℚ} (h1 : a ≥ 0) (h2 : b ≥ 0) (h3 : a + b ≤ 8) :
     _ ≤ 7 * b + 9 * 8 := by rel [h3]
     _ = 7 * b + 72 := by ring
 
+-- Example 1.4.9.a: Alternative solution.
+-- Prove 3ab + a ≤ 7b + 72 given a, b ≥ 0 and a + b ≤ 8.
+example {a b : ℚ} (h1 : a ≥ 0) (h2 : b ≥ 0) (h3 : a + b ≤ 8) :
+    3 * a * b + a ≤ 7 * b + 72 :=
+  calc
+    -- Adding a non-negative quantity (a-b)^2 keeps the inequality true.
+    3*a*b + a ≤ 3*a*b + a + (a-b)^2 := by extra
+    -- Applying distributive property to simplify the expression.
+    _ = a*b + a + a^2 + b^2 := by ring
+    -- Adding another non-negative term, 2*a*b, to the right side.
+    _ ≤ a*b + a + a^2 + 2*a*b + b^2 := by extra
+    -- Rearranging terms to group a's and b's; preparation for applying h3.
+    _ = (a+b-b)*b + (a+b-b) + (a+b)^2 := by ring
+    -- Applying the constraint a + b ≤ 8 to substitute a + b with 8.
+    _ ≤ (8-b)*b + (8-b) + (8)^2 := by rel [h3]
+    -- Simplifying the expression to make the square term explicit.
+    _ = -b^2 + 7*b + 72 := by ring
+     -- Mathematically, -b^2 is always non-positive since b^2 is non-negative.
+    -- We need to justify removing -b^2 does not increase the value.
+    -- TODO: Identify a suitable Lean tactic or lemma for justifying -b^2 ≤ 0.
+    -- The final step needs to establish that removing a non-positive term (-b^2) keeps the inequality true.
+    _ ≤ 7*b + 72 := by sorry
+
 -- Example 1.4.10
 example {a b c : ℝ} :
     a ^ 2 * (a ^ 6 + 8 * b ^ 3 * c ^ 3) ≤ (a ^ 4 + b ^ 4 + c ^ 4) ^ 2 :=
