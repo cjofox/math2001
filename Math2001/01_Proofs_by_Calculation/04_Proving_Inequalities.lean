@@ -164,24 +164,54 @@ example {a b c : ℝ} :
 Solve these problems yourself.  You may find it helpful to solve them on paper before typing them
 up in Lean. -/
 
-
 example {x y : ℤ} (h1 : x + 3 ≥ 2 * y) (h2 : 1 ≤ y) : x ≥ -1 :=
-  sorry
+  calc
+    x = x + 3 - 3 := by ring
+    _ ≥ 2*y - 3 := by rel [h1]
+    _ ≥ 2*1 - 3 := by rel [h2]
+    _ = -1 := by ring
 
 example {a b : ℚ} (h1 : 3 ≤ a) (h2 : a + 2 * b ≥ 4) : a + b ≥ 3 :=
-  sorry
+  calc
+    a + b = (a + 2*b + a)/2 := by ring
+    _ ≥ (4 + 3)/2 := by rel [h2, h1]
+    _ ≥ 3 := by numbers
 
 example {x : ℤ} (hx : x ≥ 9) : x ^ 3 - 8 * x ^ 2 + 2 * x ≥ 3 :=
-  sorry
+  calc
+    x^3 - 8*x^2 + 2*x = x*x^2 - 8*x^2 + 2*x := by ring
+    _ ≥ 9*x^2 - 8*x^2 + 2*x := by rel [hx]
+    _ = x*x + 2*x := by ring
+    _ ≥ 9*x + 2*x := by rel [hx]
+    _ = 11*x := by ring
+    _ ≥ 11*9 := by rel [hx]
+    _ ≥ 3 := by numbers
 
 example {n : ℤ} (hn : n ≥ 10) : n ^ 4 - 2 * n ^ 2 > 3 * n ^ 3 :=
-  sorry
+  calc
+    n^4 - 2*n^2 = n*n^3 - 2*n^2 := by ring
+    _ ≥ 10*n^3 - 2*n^2 := by rel [hn]
+    _ = 3*n^3 + 7*n*n^2 - 2*n^2 := by ring
+    _ ≥ 3*n^3 + 7*10*n^2 - 2*n^2 := by rel [hn]
+    _ = 3*n^3 + 68*n^2 := by ring
+    _ > 3*n^3 := by extra
 
 example {n : ℤ} (h1 : n ≥ 5) : n ^ 2 - 2 * n + 3 > 14 :=
-  sorry
+  calc
+    n^2 - 2*n + 3 = n*n - 2*n + 3 := by ring
+    _ ≥ 5*n - 2*n + 3 := by rel [h1]
+    _ = 3*n + 3 := by ring
+    _ ≥ 3*5 + 3 := by rel [h1]
+    _ > 14 := by numbers
 
 example {x : ℚ} : x ^ 2 - 2 * x ≥ -1 :=
-  sorry
+  calc
+    x^2 - 2*x = x^2 - 2*x + 1 - 1 := by ring
+    _ = (x - 1)^2 - 1 := by ring
+    _ ≥ -1 := by extra
 
 example (a b : ℝ) : a ^ 2 + b ^ 2 ≥ 2 * a * b :=
-  sorry
+  calc
+    a^2 + b^2 = a^2 - 2*a*b + b^2 + 2*a*b := by ring
+    _ = (a-b)^2 + 2*a*b := by ring
+    _ ≥ 2*a*b := by extra
