@@ -149,16 +149,43 @@ example {n : ℤ} : n ^ 2 ≠ 2 := by
 
 
 example {x : ℚ} (h : x = 4 ∨ x = -4) : x ^ 2 + 1 = 17 := by
-  sorry
+  obtain h1 | h2 := h
+  calc
+    x^2 + 1 = 4^2 + 1 := by rw [h1]
+    _ = 17 := by numbers
+  calc
+    x^2 + 1 = (-4)^2 + 1 := by rw [h2]
+    _ = 17 := by numbers
 
 example {x : ℝ} (h : x = 1 ∨ x = 2) : x ^ 2 - 3 * x + 2 = 0 := by
-  sorry
+  obtain h1 | h2 := h
+  calc
+    x^2 - 3*x + 2 = 1^2 - 3*1 + 2 := by rw [h1]
+    _ = 0 := by numbers
+  calc
+    x^2 - 3*x + 2 = 2^2 - 3*2 + 2 := by rw [h2]
+    _ = 0 := by numbers
 
 example {t : ℚ} (h : t = -2 ∨ t = 3) : t ^ 2 - t - 6 = 0 := by
-  sorry
+  obtain h1 | h2 := h
+  calc
+    t^2 - t - 6 = (-2)^2 - (-2) - 6 := by rw [h1]
+    _ = 0 := by numbers
+  calc
+    t^2 - t - 6 = (3)^2 - (3) - 6 := by rw [h2]
+    _ = 0 := by numbers
 
 example {x y : ℝ} (h : x = 2 ∨ y = -2) : x * y + 2 * x = 2 * y + 4 := by
-  sorry
+  obtain h1 | h2 := h
+  calc
+    x*y + 2*x = 2*y + 2*2 := by rw [h1]
+    _ = 2*y + 4 := by ring
+  calc
+    x*y + 2*x = x*(-2) + 2*x := by rw [h2]
+    _ = 0  := by ring
+    _ = 2*(-2) + 4 := by numbers
+    _ = 2*y + 4 := by rw [h2]
+
 
 example {s t : ℚ} (h : s = 3 - t) : s + t = 3 ∨ s + t = 5 := by
   sorry
