@@ -265,16 +265,79 @@ example {t : ℝ} (ht : t ^ 3 = t ^ 2) : t = 1 ∨ t = 0 := by
 
 -- 11.
 example {n : ℕ} : n ^ 2 ≠ 7 := by
-  sorry
+  -- Step 1 is to split the set of n natural numbers into 2 sets.
+  -- Splitting around 7, so ≤6 and ≥7, or ≤7 and ≥8 wouldn't help as none of these are squares.
+  -- Splitting on ≤2 and ≥3 gives squares of 4 and 9,
+  -- which is more useful, since they are either side of 7, so 4<7 and 9>7.
+  -- So, hn: n ≤ 2 ∨ 3 ≤ n
+  have hn := le_or_succ_le n 2
+  -- h2 : n ≤ 2, h3 : 3 ≤ n
+  obtain h2 | h3 := hn
+  -- change goal from n ^ 2 ≠ 7 to n ^ 2 < 7
+  apply ne_of_lt
+  calc
+    n^2 ≤ 2^2 := by rel [h2]
+    _ < 7 := by numbers
+  -- change goal from n ^ 2 ≠ 7 to 7 < n ^ 2
+  apply ne_of_gt
+  calc
+    7 < 3^2 := by numbers
+    _ ≤ n^2 := by rel [h3]
 
 -- 12.
 example {x : ℤ} : 2 * x ≠ 3 := by
-  sorry
+  -- Step 1: again, we want successive values of x that give us 2*x < 3 and 2*x > 3.
+  -- We split all of x into ≤ 1 and ≥ 2.
+  -- hx : x ≤ 1 ∨ 2 ≤ x
+  have hx := le_or_succ_le x 1
+  -- h1 : x ≤ 1, h2 : 2 ≤ x
+  obtain h1 | h2 := hx
+  -- change goal from 2 * x ≠ 3 to 2 * x < 3
+  apply ne_of_lt
+  calc
+    2*x ≤ 2*1 := by rel [h1]
+    _ < 3 := by numbers
+  -- change goal from 2 * x ≠ 3 to 3 < 2 * x
+  apply ne_of_gt
+  calc
+    3 < 2*2 := by numbers
+    _ ≤ 2*x := by rel [h2]
 
 -- 13.
 example {t : ℤ} : 5 * t ≠ 18 := by
-  sorry
+  -- Split t into values ≤ 3 (giving 5*3 < 18) and values ≥ 4 (giving 5*4 > 18)
+  -- ht : t ≤ 3 ∨ 4 ≤ t
+  have ht := le_or_succ_le t 3
+  -- h3 : t ≤ 3, h4 : 4 ≤ t
+  obtain h3 | h4 := ht
+  -- prove cases of t where 5 * t < 18
+  apply ne_of_lt
+  calc
+    5*t ≤ 5*3 := by rel [h3]
+    _ < 18 := by numbers
+  -- prove cases of t where 18 < 5 * t
+  apply ne_of_gt
+  calc
+    18 < 5*4 := by numbers
+    _ ≤ 5*t := by rel [h4]
 
 -- 14.
 example {m : ℕ} : m ^ 2 + 4 * m ≠ 46 := by
-  sorry
+  -- We need to find consecutive numbers of m giving the first case < 46 and second case > 46.
+  -- Since m is a Natural Number, we only need cases ≥ 0.
+  -- Case 1: m = 5, so m^2 + 4*m = 45 < 46
+  -- Case 2: m = 6, so m^2 + 4*m = 60 > 46
+  -- hm : m ≤ 5 ∨ 6 ≤ m
+  have hm := le_or_succ_le m 5
+  -- h5 : m ≤ 5, h6 : 6 ≤ m
+  obtain h5 | h6 := hm
+  -- For m ≤ 5, show m^2 + 4*m < 46
+  apply ne_of_lt
+  calc
+    m^2 + 4*m ≤ 5^2 + 4*5 := by rel [h5]
+    _ < 46 := by numbers
+  -- For 6 ≤ m, show 46 < m^2 + 4*m
+  apply ne_of_gt
+  calc
+    46 < 6^2 + 4*6 := by numbers
+    _ ≤ m^2 + 4*m := by rel [h6]
