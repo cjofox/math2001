@@ -145,9 +145,9 @@ example {n : ℤ} : n ^ 2 ≠ 2 := by
         _ ≤ n ^ 2 := by rel [hn2_ii] -- Apply the established bound on n.
 -- 2.3.5. End
 
-/-! # Exercises -/
+/-! # 2.3.6. Exercises -/
 
-
+-- 1.
 example {x : ℚ} (h : x = 4 ∨ x = -4) : x ^ 2 + 1 = 17 := by
   obtain h1 | h2 := h
   calc
@@ -157,6 +157,7 @@ example {x : ℚ} (h : x = 4 ∨ x = -4) : x ^ 2 + 1 = 17 := by
     x^2 + 1 = (-4)^2 + 1 := by rw [h2]
     _ = 17 := by numbers
 
+-- 2.
 example {x : ℝ} (h : x = 1 ∨ x = 2) : x ^ 2 - 3 * x + 2 = 0 := by
   obtain h1 | h2 := h
   calc
@@ -166,6 +167,7 @@ example {x : ℝ} (h : x = 1 ∨ x = 2) : x ^ 2 - 3 * x + 2 = 0 := by
     x^2 - 3*x + 2 = 2^2 - 3*2 + 2 := by rw [h2]
     _ = 0 := by numbers
 
+-- 3.
 example {t : ℚ} (h : t = -2 ∨ t = 3) : t ^ 2 - t - 6 = 0 := by
   obtain h1 | h2 := h
   calc
@@ -175,6 +177,7 @@ example {t : ℚ} (h : t = -2 ∨ t = 3) : t ^ 2 - t - 6 = 0 := by
     t^2 - t - 6 = (3)^2 - (3) - 6 := by rw [h2]
     _ = 0 := by numbers
 
+-- 4.
 example {x y : ℝ} (h : x = 2 ∨ y = -2) : x * y + 2 * x = 2 * y + 4 := by
   obtain h1 | h2 := h
   calc
@@ -186,33 +189,92 @@ example {x y : ℝ} (h : x = 2 ∨ y = -2) : x * y + 2 * x = 2 * y + 4 := by
     _ = 2*(-2) + 4 := by numbers
     _ = 2*y + 4 := by rw [h2]
 
-
+-- 5.
 example {s t : ℚ} (h : s = 3 - t) : s + t = 3 ∨ s + t = 5 := by
-  sorry
+  left
+  calc
+    s + t = 3 := by addarith [h]
 
+-- 6.
 example {a b : ℚ} (h : a + 2 * b < 0) : b < a / 2 ∨ b < - a / 2 := by
-  sorry
+  right
+  calc
+    b = (a + 2*b - a)/2 := by ring
+    _ < (0 - a)/2 := by rel [h]
+    _ = -a/2 := by ring
 
+-- 7.
 example {x y : ℝ} (h : y = 2 * x + 1) : x < y / 2 ∨ x > y / 2 := by
-  sorry
+  left
+  calc
+    y/2 = (2*x + 1)/2 := by rw [h]
+    _ = x + 1/2 := by ring
+    _ > x := by extra
 
+-- 8. Solving a quadratic
 example {x : ℝ} (hx : x ^ 2 + 2 * x - 3 = 0) : x = -3 ∨ x = 1 := by
-  sorry
+  -- show (x+3)*(x-1) = 0
+  have h2 :=
+  calc
+    (x+3)*(x-1) = x^2 + 2*x - 3 := by ring
+    _ = 0 := by rw [hx]
+  -- (x+3)*(x-1)=0 implies: x+3=0 or x-1=0
+  have h3 := eq_zero_or_eq_zero_of_mul_eq_zero h2
+  -- split the 2 cases, h4: x+3=0, h5: x-1=0
+  obtain h4 | h5 := h3
+  -- prove the left goal, x = -3
+  left
+  addarith [h4]
+  -- prove the right goal, x = 1
+  right
+  addarith [h5]
 
+-- 9.
 example {a b : ℝ} (hab : a ^ 2 + 2 * b ^ 2 = 3 * a * b) : a = b ∨ a = 2 * b := by
-  sorry
+  have h1 :=
+  calc
+    0 = a^2 - 3*a*b + 2*b^2 := by addarith [hab]
+    _ = (a - b)*(a - 2*b) := by ring
+  have h2 :=
+  calc
+    (a - b)*(a - 2*b) = 0 := by addarith [h1]
+    _ = 0 := by ring
+  -- h3 : a - b = 0 ∨ a - 2 * b = 0
+  have h3 := eq_zero_or_eq_zero_of_mul_eq_zero h2
+  -- h4 : a - b = 0, h5 : a - 2*b = 0
+  obtain h4 | h5 := h3
+  left
+  addarith [h4]
+  right
+  addarith [h5]
 
+-- 10.
 example {t : ℝ} (ht : t ^ 3 = t ^ 2) : t = 1 ∨ t = 0 := by
-  sorry
+  have h1 :=
+  calc
+    (t-1)*t^2 = t^3 - t^2 := by ring
+    _ = 0 := by addarith [ht]
+  -- h2 : t - 1 = 0 ∨ t ^ 2 = 0
+  have h2 := eq_zero_or_eq_zero_of_mul_eq_zero h1
+  -- h3 : t - 1 = 0, h4 : t ^ 2 = 0
+  obtain h3 | h4 := h2
+  left
+  addarith [h3]
+  right
+  cancel 2 at h4
 
+-- 11.
 example {n : ℕ} : n ^ 2 ≠ 7 := by
   sorry
 
+-- 12.
 example {x : ℤ} : 2 * x ≠ 3 := by
   sorry
 
+-- 13.
 example {t : ℤ} : 5 * t ≠ 18 := by
   sorry
 
+-- 14.
 example {m : ℕ} : m ^ 2 + 4 * m ≠ 46 := by
   sorry
