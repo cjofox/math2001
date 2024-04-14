@@ -91,27 +91,51 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
   -- Show b = 0
   · cancel 2 at h3
 
-/-! # Exercises -/
+/-! # 2.4.5. Exercises -/
 
-
+-- 1.
 example {a b : ℚ} (H : a ≤ 1 ∧ a + b ≤ 3) : 2 * a + b ≤ 4 := by
-  sorry
+  -- Ha : a ≤ 1, Hb : a + b ≤ 3
+  obtain ⟨Ha, Hb⟩ := H
+  have Hb' : 1 + a + b ≤ 1 + 3 := by addarith [Hb]
+  calc
+    2*a + b = a + a + b := by ring
+    _ ≤ 1 + a + b := by rel [Ha]
+    _ ≤ 1 + 3 := by rel [Hb']
+    _ = 4 := by numbers
 
+-- 2.
 example {r s : ℝ} (H : r + s ≤ 1 ∧ r - s ≤ 5) : 2 * r ≤ 6 := by
-  sorry
+-- H1 : r + s ≤ 1, H2 : r - s ≤ 5
+  obtain ⟨H1, H2⟩ := H
+  calc
+    2*r = r + s + r - s := by ring
+    _ ≤ 1 + 5 := by addarith [H1, H2]
+    _ = 6 := by ring
 
+-- 3.
 example {m n : ℤ} (H : n ≤ 8 ∧ m + 5 ≤ n) : m ≤ 3 := by
-  sorry
+  -- H1 : n ≤ 8, H2 : m + 5 ≤ n
+  obtain ⟨H1, H2⟩ := H
+  calc
+    m = m + 5 - 5 := by ring
+    _ ≤ n - 5 := by rel [H2]
+    _ ≤ 8 - 5 := by rel [H1]
+    _ = 3 := by numbers
 
+-- 4.
 example {p : ℤ} (hp : p + 2 ≥ 9) : p ^ 2 ≥ 49 ∧ 7 ≤ p := by
   sorry
 
+-- 5.
 example {a : ℚ} (h : a - 1 ≥ 5) : a ≥ 6 ∧ 3 * a ≥ 10 := by
   sorry
 
+-- 6.
 example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
   sorry
 
+-- 7.
 example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
     a = 0 ∧ b = 0 ∨ a = 1 ∧ b = 1 := by
   sorry
