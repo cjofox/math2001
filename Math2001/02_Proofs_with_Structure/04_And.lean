@@ -126,7 +126,11 @@ example {m n : ℤ} (H : n ≤ 8 ∧ m + 5 ≤ n) : m ≤ 3 := by
 -- 4.
 example {p : ℤ} (hp : p + 2 ≥ 9) : p ^ 2 ≥ 49 ∧ 7 ≤ p := by
   have hp' : p ≥ 7 := by addarith [hp]
-  sorry
+  constructor
+  · calc
+      p^2 ≥ 7^2 := by rel [hp']
+      _ = 49 := by numbers
+  · addarith [hp']
 
 -- 5.
 example {a : ℚ} (h : a - 1 ≥ 5) : a ≥ 6 ∧ 3 * a ≥ 10 := by
