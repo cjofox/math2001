@@ -13,14 +13,41 @@ example {x y : ℤ} (h : 2 * x - y = 4 ∧ y - x + 1 = 2) : x = 5 := by
     _ = 5 := by ring
 
 
+-- Alternative proof
+example {x y : ℤ} (h : 2 * x - y = 4 ∧ y - x + 1 = 2) : x = 5 := by
+  -- h1 : 2 * x - y = 4, h2 : y - x + 1 = 2
+  obtain ⟨h1, h2⟩ := h
+  -- get y in terms of x from h1
+  have h1' : y = 2*x - 4 := by addarith [h1]
+  -- substitute h3 into h2 to eliminate y
+  have h2' :=
+  calc
+    x = y - 1 := by addarith [h2]
+    _ = 2*x - 4 - 1 := by rw [h1']
+    _ = 2*x - 5 := by ring
+  -- solve for x
+  have hx :=
+  calc
+    5 = 2*x-x := by addarith [h2']
+    _ = x := by ring
+  -- since 5=x, x=5
+  addarith [hx]
+
+
 example {p : ℚ} (hp : p ^ 2 ≤ 8) : p ≥ -5 := by
+  -- Show that -3 ≤ p ≤ 3 (same as -3 ≤ p ∧ p ≤ 3)
   have hp' : -3 ≤ p ∧ p ≤ 3
+  -- Use lemma of absolute value less than a square is less than the square.
+  -- Change goal from -3 ≤ p ∧ p ≤ 3 to p ^ 2 ≤ 3 ^ 2
   · apply abs_le_of_sq_le_sq'
     calc
       p ^ 2 ≤ 9 := by addarith [hp]
       _ = 3 ^ 2 := by numbers
     numbers
-  sorry
+  -- h_neg3 : -3 ≤ p, h_pos3 : p ≤ 3
+  · obtain ⟨h_neg3, h_pos3⟩ := hp'
+    addarith [h_neg3]
+
 
 example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := by
   constructor
@@ -43,13 +70,26 @@ example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := b
 
 
 example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
+  -- Show a ^ 2 = 0
   have h2 : a ^ 2 = 0
+  -- change goal from a ^ 2 = 0 to a ^ 2 ≤ 0
   · apply le_antisymm
     calc
       a ^ 2 ≤ a ^ 2 + b ^ 2 := by extra
       _ = 0 := by rw [h1]
     extra
-  sorry
+  have h3 : b^2 = 0
+  · calc
+      b^2 = -a^2 := by addarith [h1]
+      _ = -0 := by rw [h2]
+      _ = 0 := by ring
+
+  -- split goal a = 0 ∧ b = 0 into 2 sub goals
+  constructor
+  -- Show a = 0
+  · cancel 2 at h2
+  -- Show b = 0
+  · cancel 2 at h3
 
 /-! # Exercises -/
 
