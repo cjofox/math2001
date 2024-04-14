@@ -125,15 +125,40 @@ example {m n : ℤ} (H : n ≤ 8 ∧ m + 5 ≤ n) : m ≤ 3 := by
 
 -- 4.
 example {p : ℤ} (hp : p + 2 ≥ 9) : p ^ 2 ≥ 49 ∧ 7 ≤ p := by
+  have hp' : p ≥ 7 := by addarith [hp]
   sorry
 
 -- 5.
 example {a : ℚ} (h : a - 1 ≥ 5) : a ≥ 6 ∧ 3 * a ≥ 10 := by
-  sorry
+  have h1 : a ≥ 6 := by addarith [h]
+  constructor
+  · addarith [h1]
+  · calc
+      3*a ≥ 3*6 := by rel [h1]
+      _ ≥ 10 := by numbers
 
 -- 6.
 example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
-  sorry
+  -- h1 : x + y = 5, h2 : x + 2 * y = 7
+  have ⟨h1, h2⟩ := h
+  have hy : y = - x + 5 := by addarith [h1]
+  -- substitute hy into h2
+  have hx :=
+  calc
+    x = 7 - 2*y := by addarith [h2]
+  -- substitute y = - x + 5
+    _ = 7 - 2*(- x + 5) := by rw [hy]
+    _ = 2*x - 3 := by ring
+  have hx' :=
+  calc
+    3 = 2*x - x := by addarith [hx]
+    _ = x := by ring
+  constructor
+  -- x = 3
+  · addarith [hx']
+  -- Substutite x = 3 into y = - x + 5, to show y = 3
+  · addarith [hy, hx']
+
 
 -- 7.
 example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
