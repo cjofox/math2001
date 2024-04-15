@@ -164,7 +164,66 @@ example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
   · addarith [hy, hx']
 
 
--- 7.
+-- 7. Prove that if a * b equals both a and b,
+--    then a and b must either both be 0 or both be 1.
 example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
     a = 0 ∧ b = 0 ∨ a = 1 ∧ b = 1 := by
-  sorry
+
+  -- show a * (b - 1) = 0
+  have h1' :=
+  calc
+    a * (b-1) = a*b - a := by ring
+    _ = 0 := by addarith [h1]
+
+  -- show b * (a - 1) = 0
+  have h2' :=
+  calc
+    b * (a-1) = a*b - b := by ring
+    _ = 0 := by addarith [h2]
+
+  -- h1'' : a = 0 ∨ b - 1 = 0
+  have h1'' := eq_zero_or_eq_zero_of_mul_eq_zero h1'
+  -- ha0 : a = 0, hb1 : b - 1 = 0
+  obtain ha0 | hb1 := h1''
+
+  -- Left hand cases: a=0 (ha0) and b=0 (calculated below)
+  -- Hypotheses in scope:
+  -- h1, h2, h1', h2', ha0
+
+  -- use h2' : b * (a - 1) = 0 and ha0 : a = 0 to show -b = -0 (b=0)
+  have hb0' :=
+  calc
+    0 = b * (a-1) := by addarith [h2']
+    _ = b * (0-1) := by rw [ha0]
+  have hb0'' :=
+  calc
+    -0 = b * (-1) := by addarith [hb0']
+    _ = -b := by ring
+
+  -- left goal: a = 0 ∧ b = 0
+  left
+  constructor
+  -- a = 0
+  · addarith [ha0]
+  -- b = 0
+  · addarith [hb0'']
+
+  -- Right hand cases: b=1, a=1 (calculated below)
+  -- Hypotheses in scope:
+  -- h1, h2, h1', h2', hb1
+
+  -- use h2' : b * (a - 1) = 0 and hb1' : b = 1 (hb1 : b - 1 = 0)
+  -- to show that ha1' : 0 = 1 * (a - 1)
+  have hb1' : b = 1 := by addarith [hb1]
+  have ha1'
+  calc
+    0 = b * (a-1) := by addarith [h2']
+    _ = 1 * (a-1) := by rw [hb1']
+
+  -- right goal: a = 1 ∧ b = 1
+  right
+  constructor
+  -- a = 1
+  · addarith [ha1']
+  -- b = 1
+  · addarith [hb1]
