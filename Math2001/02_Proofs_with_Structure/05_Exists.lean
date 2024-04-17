@@ -84,31 +84,47 @@ example : ∃ a b c d : ℕ,
   numbers
   numbers
 
-/-! # Exercises -/
+/-! # 2.5.9. Exercises -/
 
-
+-- 1.
 example : ∃ t : ℚ, t ^ 2 = 1.69 := by
-  sorry
+  use 1.3
+  numbers
+
+-- 2.
 example : ∃ m n : ℤ, m ^ 2 + n ^ 2 = 85 := by
-  sorry
+  use 9, 2
+  numbers
 
+-- 3.
 example : ∃ x : ℝ, x < 0 ∧ x ^ 2 < 1 := by
-  sorry
-example : ∃ a b : ℕ, 2 ^ a = 5 * b + 1 := by
-  sorry
+  use -0.5
+  constructor
+  · numbers
+  · numbers
 
+-- 4.
+example : ∃ a b : ℕ, 2 ^ a = 5 * b + 1 := by
+  use 4, 3
+  numbers
+
+-- 5.
 example (x : ℚ) : ∃ y : ℚ, y ^ 2 > x := by
   sorry
 
+-- 6.
 example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by
   sorry
 
+-- 7.
 example {m : ℤ} (h : ∃ a, 2 * a = m) : m ≠ 5 := by
   sorry
 
+-- 8.
 example {n : ℤ} : ∃ a, 2 * a ^ 3 ≥ n * a + 7 := by
   sorry
 
+-- 9.
 example {a b c : ℝ} (ha : a ≤ b + c) (hb : b ≤ a + c) (hc : c ≤ a + b) :
     ∃ x y z, x ≥ 0 ∧ y ≥ 0 ∧ z ≥ 0 ∧ a = y + z ∧ b = x + z ∧ c = x + y := by
   sorry
