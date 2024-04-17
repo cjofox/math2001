@@ -4,44 +4,75 @@ import Library.Basic
 
 math2001_init
 
-
+-- 2.5.1.
 example {a : ℚ} (h : ∃ b : ℚ, a = b ^ 2 + 1) : a > 0 := by
   obtain ⟨b, hb⟩ := h
   calc
     a = b ^ 2 + 1 := hb
     _ > 0 := by extra
 
-
+-- 2.5.2.
 example {t : ℝ} (h : ∃ a : ℝ, a * t < 0) : t ≠ 0 := by
+  -- x : ℝ, hxt : x * t < 0
+  -- notice that "x" is substituted into "a"
   obtain ⟨x, hxt⟩ := h
-  have H := le_or_gt x 0
-  obtain hx | hx := H
+  -- H0 : x ≤ 0 ∨ x > 0
+  have H0 := le_or_gt x 0
+  -- hxle0 : x ≤ 0, hxgt0 : x > 0
+  obtain hxle0 | hxgt0 := H0
+
+  -- Case 1: x ≤ 0 (hxle0)
   · have hxt' : 0 < (-x) * t := by addarith [hxt]
-    have hx' : 0 ≤ -x := by addarith [hx]
+    have hx' : 0 ≤ -x := by addarith [hxle0]
     cancel -x at hxt'
+    -- change goal from t ≠ 0 to 0 < t
     apply ne_of_gt
     apply hxt'
-  · sorry
 
+  -- Case 2: x > 0 (hxle0)
+  · have hxt'' :=
+    calc
+      0 < -x*t := by addarith [hxt]
+      _ = x*(-t) := by ring
+    -- -t > 0
+    cancel x at hxt''
+    -- change goal from t ≠ 0 to t > 0
+    apply ne_of_lt
+    -- t < 0
+    addarith [hxt'']
+
+-- 2.5.3.
 example : ∃ n : ℤ, 12 * n = 84 := by
   use 7
   numbers
 
-
+-- 2.5.4.
 example (x : ℝ) : ∃ y : ℝ, y > x := by
   use x + 1
   extra
 
-
+-- 2.5.5.
 example : ∃ m n : ℤ, m ^ 2 - n ^ 2 = 11 := by
-  sorry
+  use 6, 5
+  numbers
 
+-- 2.5.6.
 example (a : ℤ) : ∃ m n : ℤ, m ^ 2 - n ^ 2 = 2 * a + 1 := by
-  sorry
+  use a+1, a
+  ring
 
+-- 2.5.7.
 example {p q : ℝ} (h : p < q) : ∃ x, p < x ∧ x < q := by
-  sorry
+  use (p+q)/2
+  constructor
+  · calc
+      p = (p+p)/2 := by ring
+      _ < (p+q)/2 := by addarith [h]
+  · calc
+      (p+q)/2 < (q+q)/2 := by addarith [h]
+      _ = q := by ring
 
+-- 2.5.8.
 example : ∃ a b c d : ℕ,
     a ^ 3 + b ^ 3 = 1729 ∧ c ^ 3 + d ^ 3 = 1729 ∧ a ≠ c ∧ a ≠ d := by
   use 1, 12, 9, 10
